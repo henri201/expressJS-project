@@ -1,9 +1,11 @@
+const fs = require('fs');  //filesystem
 const express = require("express");
 const app = express();
 const path = require('path');
 
 
 app.use(express.static('public')); //if the recuest is found in public folder use it, otherwise forward to other routes
+app.use(express.urlencoded({extended: false}));
 
 app.get('/', function(req, res){
     const htmlFilePath = path.join(__dirname, 'views', 'index.html');
@@ -20,6 +22,20 @@ app.get('/recommend', function(req, res) {
     res.sendFile(htmlFilePath);
 });
 
+app.post('/recommend', function(req, res){
+   const restaurant = req.body;
+   const filePath = path.join(__dirname, 'data', 'restaurants.json');
+
+   const fileData = fs.readFileSync(filePath);
+   const storedRestaurants = JSON.parse(fileData);
+
+   storedRestaurants.push(restaurant);
+
+   fs.writeFileSync(filePath, JSON.stringify(storedRestaurants));
+
+   res.redirect('/confirm');
+});
+
 app.get('/confirm', function(req, res) {
     const htmlFilePath = path.join(__dirname, 'views', 'confirm.html');
     res.sendFile(htmlFilePath);
@@ -28,4 +44,5 @@ app.get('/about', function(req, res) {
     const htmlFilePath = path.join(__dirname, 'views', 'about.html');
     res.sendFile(htmlFilePath);
 });
+
 app.listen(3000);
