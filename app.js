@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 
 
-
+app.use(express.static('public')); //if the recuest is found in public folder use it, otherwise forward to other routes
 
 app.get('/', function(req, res){
     const htmlFilePath = path.join(__dirname, 'views', 'index.html');
