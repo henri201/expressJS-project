@@ -1,25 +1,31 @@
 const fs = require('fs');  //filesystem
 const express = require("express");
-const app = express();
 const path = require('path');
+const app = express();
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.use(express.static('public')); //if the recuest is found in public folder use it, otherwise forward to other routes
 app.use(express.urlencoded({extended: false}));
 
 app.get('/', function(req, res){
-    const htmlFilePath = path.join(__dirname, 'views', 'index.html');
-    res.sendFile(htmlFilePath);
+    res.render('index');   //parse a template file, confirm it to html and send it back to the browser
 });
 
 app.get('/restaurants', function(req, res){
-    const htmlFilePath = path.join(__dirname, 'views', 'restaurants.html');
-    res.sendFile(htmlFilePath);
+    
+    const filePath = path.join(__dirname, 'data', 'restaurants.json');
+
+    const fileData = fs.readFileSync(filePath);
+    const storedRestaurants = JSON.parse(fileData);
+    res.render('restaurants', {numberOfRestaurants: storedRestaurants.length, restaurants: storedRestaurants,});
 });
 
 app.get('/recommend', function(req, res) {
-    const htmlFilePath = path.join(__dirname, 'views', 'recommend.html');
-    res.sendFile(htmlFilePath);
+    /*const htmlFilePath = path.join(__dirname, 'views', 'recommend.html');
+    res.sendFile(htmlFilePath); */
+    res.render('recommend');
 });
 
 app.post('/recommend', function(req, res){
@@ -37,12 +43,10 @@ app.post('/recommend', function(req, res){
 });
 
 app.get('/confirm', function(req, res) {
-    const htmlFilePath = path.join(__dirname, 'views', 'confirm.html');
-    res.sendFile(htmlFilePath);
+    res.render('confirm');
 });
 app.get('/about', function(req, res) {
-    const htmlFilePath = path.join(__dirname, 'views', 'about.html');
-    res.sendFile(htmlFilePath);
+    res.render('about');
 });
 
 app.listen(3000);
