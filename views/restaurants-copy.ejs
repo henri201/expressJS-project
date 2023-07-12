@@ -9,9 +9,9 @@
     <%- include('includes/aside-drawer')%>
     <main>
       <h1> <%= restaurant.name %></h1>
-      <p> cuisine/ address</p>
-      <p>description of the restaurant</p>
-      <p> <a href="">view website</a></p>
+      <p> <%= restaurant.cuisine %> | <%= restaurant.address %></p>
+      <p><%= restaurant.description %></p>
+      <p> <a href="<%= restaurant.website %>">view website</a></p>
     </main>
   </body>
 </html>
