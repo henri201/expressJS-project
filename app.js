@@ -35,6 +35,8 @@ app.get('/restaurants/:id', function (req, res){
         return res.render('restaurants-copy', { restaurant: restaurant });
     }
    }
+
+   res.render('404');
 });
 
 app.get('/recommend', function(req, res) {
