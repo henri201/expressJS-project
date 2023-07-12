@@ -67,4 +67,13 @@ app.get('/about', function(req, res) {
     res.render('about');
 });
 
+
+app.use((req, res) => {
+    res.render('404');   //gets used if a request is not handled by any other route
+});
+
+app.use((error, req, res, next) => {
+    res.render('500');
+});
+
 app.listen(3000);
