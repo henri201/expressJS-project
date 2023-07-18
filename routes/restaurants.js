@@ -5,16 +5,27 @@ const router = express.Router();
 
 
 router.get('/restaurants', function(req, res){
+    let order = req.query.order;
+    let nextOrder = 'desc';
+
+    if (order !== 'asc' && order !== 'desc'){
+        order = 'asc';
+    };
+
+    if (order === 'desc'){
+        nextOrder = 'asc';
+    }
     const storedRestaurants = resData.getStoredRestaurants();
 
     storedRestaurants.sort((resA, resB)=> {
-        if (resA.name > resB.name) {
-            return 1
+        if ((order === 'asc' && resA.name > resB.name) || (order === 'desc' && resB.name > resA.name)) {
+            return 1;
         }
-        return -1
+        return -1;
     });
 
-    res.render('restaurants', {numberOfRestaurants: storedRestaurants.length, restaurants: storedRestaurants,});
+    res.render('restaurants', {numberOfRestaurants: storedRestaurants.length, restaurants: storedRestaurants,
+    nextOrder: nextOrder});
 });
 
 router.get('/restaurants/:id', function (req, res){
